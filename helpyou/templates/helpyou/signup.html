@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+    crossorigin="anonymous"
+  />
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+    crossorigin="anonymous"
+  ></script>
+  <link href="{% static 'helpyou/css/signup.css' %}" rel="stylesheet" type="text/css">
+    <title>회원가입</title>
+
+</head>
+<body>
+    <body class="text">
+        <main class="form-signup w-100 m-auto">
+            <form method="post" class="post-form" action="{% url 'helpyou:signup' %}">{% csrf_token %}
+                {% include "helpyou/form_errors.html" %}
+                <a class="navbar-brand" href="/">
+                <img class="mb-4" src="https://cdn.discordapp.com/attachments/1131799837742997516/1133282568146518057/12-removebg-preview.png" alt="로고" width="150" height="60">
+                </a>
+                <h2>회원가입</h2>
+                <br><br>
+                <div class="mb-3">
+                    <label for="username" class="ID_reg">아이디<span>*</span></label>
+                    <div class="input-group">
+                    <input type="text" class="form-control" name="username" id="username" placeholder="아이디를 입력해주세요." required>
+                    <button type="button" class="btn btn-outline-success" id="username_check" onclick="checkId();">중복확인</button>
+                        <input type="hidden" id="idcheck" value="0"/> <!--idcheck 값이 0일 경우 id확인 불가능-->
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="password1" class="pass-reg">비밀번호<span>*</span></label>
+                    <input type="password" class="form-control" name="password1" id="password1" placeholder="비밀번호를 입력해주세요.(8자리 이상)" required>
+                </div>
+                <div class="mb-3">
+                    <label for="password2" class="pass-reg">비밀번호 확인<span>*</span></label>
+                    <input type="password" class="form-control" name="password2" id="password2" placeholder="비밀번호를 다시 입력해주세요." required>
+                </div>
+                <div class="mb-3">
+                <label for="fullname" class="ID_reg">이름<span>*</span></label>
+                <div class="input-group">
+                <input type="text" class="form-control" name="fullname" id="fullname" placeholder="이름을 입력해주세요.">
+                </div>
+                </div>
+                <div class="mb-3">
+                    <label for="address" class="address-reg">주소<span>*</span></label>
+                    <input  class="form-control" name="address" id="address" placeholder="주소를 입력해 주세요">
+                    <label for="detailed_address" class="address-reg">상세주소<span>*</span></label>
+                    <input  class="form-control" name="detailed_address" id="detailed_address" placeholder="상세 주소를 입력해 주세요">
+                </div>
+                <div class="mb-3">
+                    <label for="birth" class="birth-reg">생년월일</label>
+                    <div class="input-group">
+                        <div class="col-3">
+                            <label for="year" class="birth-reg">년도</label>
+                            <input  class="form-control" name="year" id="year" placeholder="년">
+                        </div>
+
+                        <div class="col-3">
+                            <label for="month" class="birth-reg">월</label>
+                            <input  class="form-control" name="month" id="month" placeholder="월">
+                        </div>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <div class="col-3">
+                            <label for="day" class="birth-reg">일</label>
+                            <input  class="form-control" name="day" id="day" placeholder="일">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="mb-3">
+                    <label for="phone_number" class="number-reg">전화번호<span>*</span></label>
+                    <input  class="form-control" name="phone_number" id="phone_number" placeholder="전화번호를 입력해주세요('-'을 꼭 추가해 주세요.)">
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="email-reg">이메일<span>*</span></label>
+                    <input  class="form-control" name="email" id="email" placeholder="이메일을 입력해주세요. 예) aaa@naver.com"
+                    onclick="checkEmail()">
+                </div>
+
+                {% for form in forms %}
+                {{ form.errors }}
+                {% endfor %}
+                <button class="w-100 btn btn-lg btn btn-success" type="submit" onclick="registerMember()">회원가입</button>
+            </form>
+        </main>
+    </body>
+    <script>
+        function Goindex() {
+            window.location.href = "index.html";
+        }
+
+        function registerMember() {
+
+            username = document.getElementById("username").value;
+            if(username == "") {
+                alert("아이디 입력 필수입니다.");
+                document.getElementById("username").focus();
+                return false;
+            }
+
+            password1 = document.getElementById("password1").value;
+            if(password1 == "") {
+                alert("비밀번호 입력 필수입니다.");
+                document.getElementById("password1").focus();
+                return false;
+            }
+            /*else if(8 > len(password1)) {
+                alert("비밀번호는 8자 이상 입력해주세요.")
+                document.getElementById("password1").focus();
+                return false;
+            }*/
+
+            password2 = document.getElementById("password2").value;
+            if(password2 == "") {
+                alert("비밀번호 확인 필수입니다.");
+                document.getElementById("password2").focus();
+                return false;
+            }
+
+            if(password1 != password2) {
+                alert("비밀번호가 일치하지 않습니다.");
+                document.getElementById("password2").focus();
+                return false;
+            }
+
+
+
+            fullname = document.getElementById("fullname").value;
+            if(fullname == "") {
+                alert("이름 입력 필수입니다.");
+                document.getElementById("fullname").focus();
+                return false;
+            }
+
+            address = document.getElementById("address").value;
+            if(address == "") {
+                alert("주소 입력 필수입니다.");
+                document.getElementById("address").focus();
+                return false;
+            }
+
+
+            detailed_address = document.getElementById("detailed_address").value;
+            if(detailed_address == "") {
+                alert("상세 주소 입력 필수입니다.");
+                document.getElementById("detailed_address").focus();
+                return false;
+            }
+
+            year = document.getElementById("year").value;
+            if(year == "") {
+                alert("년도 입력 필수입니다.");
+                document.getElementById("year").focus();
+                return false;
+            }
+
+            month = document.getElementById("month").value;
+            if(month == "") {
+                alert("월 입력 필수입니다.");
+                document.getElementById("month").focus();
+                return false;
+            }
+
+            day = document.getElementById("day").value;
+            if(day == "") {
+                alert("일 입력 필수입니다.");
+                document.getElementById("day").focus();
+                return false;
+            }
+
+            phone_number = document.getElementById("phone_number").value;
+            if(phone_number == "") {
+                alert("전화번호 입력 필수입니다.");
+                document.getElementById("phone_number").focus();
+                return false;
+            }
+
+            email = document.getElementById("email").value;
+            if(email == "") {
+                alert("이메일 입력 필수입니다.");
+                document.getElementById("email").focus();
+                return false;
+            }
+
+            username = document.getElementById("username").value;
+            email = document.getElementById("email").value;
+
+            //var  = "user_insert?username=" + username + "&password1=" + password1 + "&fullname=" + fullname
+              //  + "&address=" + address + "&year=" + year + "&month=" + month +"&day=" + day + "&phone_number=" + phone_number
+               // + "&email=" + email;
+            //alert(strurl);
+            //return false;strurl
+
+
+        }
+
+        // 아이디 중복확인
+        function checkId() {
+
+        }
+
+
+
+
+
+
+
+
+
+    </script>
+
+</body>
+</html>

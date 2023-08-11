@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>도와줘유</title>
+</head>
+<body>
+    {% if form.errors %}
+        {% for field in form %}
+            {% for error in field.errors %} <!--필드 오류를 출력 : 사용자가 입력한 값이 누락되었거나, 형식이 일치하지 않는 경우-->
+               <!--<div class="alert alert-danger">
+                    <strong>{{ field.label }}</strong>
+                    {{ error }}
+                </div>-->
+            {% endfor %}
+        {% endfor %}
+        {% for error in form.non_field_errors %} <!--넌필드 오류를 출력 : 필드의 값과는 상관없이 다른 이유로 발생하는 오류-->
+            <!--<div class="alert alert-danger">
+                <strong>{{ error }}</strong>
+            </div>-->
+        {% endfor %}
+    {% endif %}
+</body>
+</html>
